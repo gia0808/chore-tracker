@@ -1,72 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Pet Name List</title>
+  <meta charset="UTF-8" />
+  <title>Gia Pets Cloud List</title>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js"></script>
+
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 40px;
-      background-color: #f0f8ff;
-    }
-
-    h1 {
-      color: #444;
-    }
-
-    input {
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-
-    button {
-      padding: 10px 15px;
-      font-size: 16px;
-      background-color: #4caf50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-left: 8px;
-    }
-
-    ul {
-      margin-top: 20px;
-      padding-left: 20px;
-    }
-
-    li {
-      font-size: 18px;
-      margin-bottom: 5px;
+      padding: 20px;
+      background: #f0f8ff;
     }
   </style>
 </head>
 <body>
+  <h1>🐾 Gia's Pet List</h1>
 
-  <h1>🐶 Add Your Pet's Name</h1>
-
-  <input type="text" id="petInput" placeholder="Enter pet name">
+  <input type="text" id="petInput" placeholder="Enter pet name" />
   <button onclick="addPet()">Add</button>
 
   <ul id="petList"></ul>
 
   <script>
+    // Your Firebase config object
+    const firebaseConfig = {
+      apiKey: "AIzaSyBUGZMhyKzAKy27kMePp16l8TOInem8wz4",
+      authDomain: "giapets.firebaseapp.com",
+      projectId: "giapets",
+      storageBucket: "giapets.firebasestorage.app",
+      messagingSenderId: "226507794249",
+      appId: "1:226507794249:web:2bca8b7aa679adb83f9c98",
+      measurementId: "G-TZ451P67PZ"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+
+    // Initialize Firestore
+    const db = firebase.firestore();
+    const petList = document.getElementById("petList");
+    const petInput = document.getElementById("petInput");
+
+    // Listen for realtime updates from Firestore 'pets' collection
+    db.collection("pets").onSnapshot((snapshot) => {
+      petList.innerHTML = ""; // Clear list before updating
+      snapshot.forEach((doc) => {
+        const li = document.createElement("li");
+        li.textContent = doc.data().name;
+        petList.appendChild(li);
+      });
+    });
+
+    // Add pet to Firestore
     function addPet() {
-      const input = document.getElementById("petInput");
-      const petName = input.value.trim();
-
-      if (petName === "") return;
-
-      const li = document.createElement("li");
-      li.textContent = petName;
-
-      document.getElementById("petList").appendChild(li);
-      input.value = "";
-      input.focus();
+      const name = petInput.value.trim();
+      if (!name) return;
+      db.collection("pets").add({ name: name });
+      petInput.value = "";
+      petInput.focus();
     }
   </script>
-
 </body>
 </html>
