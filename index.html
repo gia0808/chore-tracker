@@ -25,7 +25,6 @@
   <ul id="petList"></ul>
 
   <script>
-    // Your Firebase config object
     const firebaseConfig = {
       apiKey: "AIzaSyBUGZMhyKzAKy27kMePp16l8TOInem8wz4",
       authDomain: "giapets.firebaseapp.com",
@@ -36,18 +35,15 @@
       measurementId: "G-TZ451P67PZ"
     };
 
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     firebase.analytics();
 
-    // Initialize Firestore
     const db = firebase.firestore();
     const petList = document.getElementById("petList");
     const petInput = document.getElementById("petInput");
 
-    // Listen for realtime updates from Firestore 'pets' collection
     db.collection("pets").onSnapshot((snapshot) => {
-      petList.innerHTML = ""; // Clear list before updating
+      petList.innerHTML = "";
       snapshot.forEach((doc) => {
         const li = document.createElement("li");
         li.textContent = doc.data().name;
@@ -55,13 +51,22 @@
       });
     });
 
-    // Add pet to Firestore
     function addPet() {
       const name = petInput.value.trim();
-      if (!name) return;
-      db.collection("pets").add({ name: name });
-      petInput.value = "";
-      petInput.focus();
+      if (!name) {
+        console.log("Input is empty.");
+        return;
+      }
+      db.collection("pets").add({ name: name })
+        .then(() => {
+          console.log("Pet added:", name);
+          petInput.value = "";
+          petInput.focus();
+        })
+        .catch((error) => {
+          console.error("Error adding pet:", error);
+          alert("Oops! Could not add pet. Check console for details.");
+        });
     }
   </script>
 </body>
