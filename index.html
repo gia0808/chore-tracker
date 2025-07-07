@@ -1,43 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>My Chore Tracker</title>
+  <meta charset="UTF-8">
+  <title>Pet Name List</title>
   <style>
-    body { font-family: Arial; background: #f0f0f0; text-align: center; }
-    h1 { color: #333; }
-    .column {
-      display: inline-block;
-      vertical-align: top;
-      width: 30%;
-      margin: 10px;
-      background: white;
-      border-radius: 10px;
-      padding: 10px;
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background-color: #f0f8ff;
     }
-    .column h2 { border-bottom: 2px solid #ccc; }
-    .task {
-      background: #e3e3e3;
-      padding: 8px;
-      margin: 6px 0;
+
+    h1 {
+      color: #444;
+    }
+
+    input {
+      padding: 10px;
+      font-size: 16px;
       border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-left: 8px;
+    }
+
+    ul {
+      margin-top: 20px;
+      padding-left: 20px;
+    }
+
+    li {
+      font-size: 18px;
+      margin-bottom: 5px;
     }
   </style>
 </head>
 <body>
-  <h1>🧹 Gia’s Chore Tracker</h1>
-  <div class="column">
-    <h2>To Do</h2>
-    <div class="task">🧺 Laundry</div>
-    <div class="task">🧹 Sweep Floor</div>
-    <div class="task">📚 Homework</div>
-  </div>
-  <div class="column">
-    <h2>Doing</h2>
-    <div class="task">🍽️ Wash Dishes</div>
-  </div>
-  <div class="column">
-    <h2>Done</h2>
-    <div class="task">🛏️ Made Bed</div>
-  </div>
+
+  <h1>🐶 Add Your Pet's Name</h1>
+
+  <input type="text" id="petInput" placeholder="Enter pet name">
+  <button onclick="addPet()">Add</button>
+
+  <ul id="petList"></ul>
+
+  <script>
+    function addPet() {
+      const input = document.getElementById("petInput");
+      const petName = input.value.trim();
+
+      if (petName === "") return;
+
+      const li = document.createElement("li");
+      li.textContent = petName;
+
+      document.getElementById("petList").appendChild(li);
+      input.value = "";
+      input.focus();
+    }
+  </script>
+
 </body>
 </html>
